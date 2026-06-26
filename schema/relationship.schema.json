@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minuet.ai/dtl/v0/relationship.schema.json",
+  "title": "DTL Relationship Record",
+  "$comment": "The constraint source != target is normative (see \u00a73) but cannot be expressed in JSON Schema; implementations MUST enforce it externally.",
+  "type": "object",
+  "required": [
+    "source",
+    "target",
+    "type",
+    "status",
+    "profile",
+    "proofs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Optional unique identifier for the relationship record."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the source agent (substrate-defined)."
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the target agent (substrate-defined). Must differ from source."
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exactly one relationship type, from an open vocabulary."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "established",
+        "declined",
+        "withdrawn",
+        "revoked"
+      ]
+    },
+    "profile": {
+      "type": "string",
+      "description": "Confirmation profile that produced the proofs, e.g. 'attested' or 'signed'."
+    },
+    "proofs": {
+      "type": "object",
+      "description": "Proofs of authorization keyed by action; form defined by the confirmation profile.",
+      "properties": {
+        "proposal": {
+          "type": "object"
+        },
+        "confirmation": {
+          "type": "object"
+        },
+        "decline": {
+          "type": "object"
+        },
+        "withdrawal": {
+          "type": "object"
+        },
+        "revocation": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "description": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "$comment": "format: date-time is annotation-only in JSON Schema 2020-12 (here and in updated_at); a deployment MAY choose to assert it."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ext": {
+      "type": "object",
+      "description": "Optional deployment- or substrate-specific extension fields (\u00a73); contents are unconstrained."
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "proposed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "proofs"
+        ],
+        "properties": {
+          "proofs": {
+            "required": [
+              "proposal"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "confirmation"
+                  ]
+                },
+                {
+                  "required": [
+                    "decline"
+                  ]
+                },
+                {
+                  "required": [
+                    "withdrawal"
+                  ]
+                },
+                {
+                  "required": [
+                    "revocation"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "established"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "proofs"
+        ],
+        "properties": {
+          "proofs": {
+            "required": [
+              "proposal",
+              "confirmation"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "decline"
+                  ]
+                },
+                {
+                  "required": [
+                    "withdrawal"
+                  ]
+                },
+                {
+                  "required": [
+                    "revocation"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "declined"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "proofs"
+        ],
+        "properties": {
+          "proofs": {
+            "required": [
+              "proposal",
+              "decline"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "confirmation"
+                  ]
+                },
+                {
+                  "required": [
+                    "withdrawal"
+                  ]
+                },
+                {
+                  "required": [
+                    "revocation"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "withdrawn"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "proofs"
+        ],
+        "properties": {
+          "proofs": {
+            "required": [
+              "proposal",
+              "withdrawal"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "confirmation"
+                  ]
+                },
+                {
+                  "required": [
+                    "decline"
+                  ]
+                },
+                {
+                  "required": [
+                    "revocation"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "revoked"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "proofs"
+        ],
+        "properties": {
+          "proofs": {
+            "required": [
+              "proposal",
+              "confirmation",
+              "revocation"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "decline"
+                  ]
+                },
+                {
+                  "required": [
+                    "withdrawal"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
