@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://minuet.ai/dtl/v0/relationship.schema.json",
   "title": "DTL Relationship Record",
-  "$comment": "The constraint source != target is normative (see \u00a73) but cannot be expressed in JSON Schema; implementations MUST enforce it externally.",
+  "$comment": "The constraint source != target is normative (see §3) but cannot be expressed in JSON Schema; implementations MUST enforce it externally.",
   "type": "object",
   "required": [
     "source",
@@ -82,7 +82,7 @@
     },
     "ext": {
       "type": "object",
-      "description": "Optional deployment- or substrate-specific extension fields (\u00a73); contents are unconstrained."
+      "description": "Optional deployment- or substrate-specific extension fields (§3); contents are unconstrained."
     }
   },
   "additionalProperties": false,
