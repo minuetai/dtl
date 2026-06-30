@@ -215,7 +215,7 @@ No existing standard, to the author's knowledge, provides exactly DTL's primitiv
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://minuet.ai/dtl/v0/relationship.schema.json",
+  "$id": "https://opendtl.org/v0/relationship.schema.json",
   "title": "DTL Relationship Record",
   "$comment": "The constraint source != target is normative (see §3) but cannot be expressed in JSON Schema; implementations MUST enforce it externally.",
   "type": "object",
