@@ -2,7 +2,7 @@
 """DTL v0.5 JSON Schema validation harness.
 
 Validates the standalone normative schema shipped in this repo
-(schema/relationship.schema.json, Draft 2020-12) against:
+(v0/relationship.schema.json, Draft 2020-12) against:
   * worked positives  — the three Appendix B examples (B.1/B.2/B.3) + one
                          record for each remaining lifecycle state, and
   * negatives          — required-field / field-constraint / additionalProperties
@@ -20,7 +20,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-SCHEMA_PATH = Path(__file__).resolve().parent / "schema" / "relationship.schema.json"
+SCHEMA_PATH = Path(__file__).resolve().parent / "v0" / "relationship.schema.json"
 
 schema = json.loads(SCHEMA_PATH.read_text())
 Draft202012Validator.check_schema(schema)  # the schema itself must be a valid dialect doc
